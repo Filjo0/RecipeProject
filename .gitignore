@@ -387,5 +387,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /.idea/
 /.vs/
-!/Screenshot Debug.jpg
-!/Screenshot Test.jpg
+/Screenshot Debug.jpg
+/Screenshot Test.jpg
