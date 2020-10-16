@@ -13,12 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="571b496a-96ad-4717-a4ca-8f7b2b6ed629" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.RecipeAssignment/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RecipeAssignment/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.RecipeAssignment/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RecipeAssignment/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RecipeAssignment/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RecipeAssignment/RecipeAssignment.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/RecipeAssignment/RecipeAssignment.csproj" afterDir="false" />
-    </list>
+    <list default="true" id="571b496a-96ad-4717-a4ca-8f7b2b6ed629" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,7 +93,7 @@
       <workItem from="1602515289470" duration="763000" />
       <workItem from="1602816648599" duration="1379000" />
       <workItem from="1602832676442" duration="8858000" />
-      <workItem from="1602842687045" duration="1383000" />
+      <workItem from="1602842687045" duration="1834000" />
     </task>
     <servers />
   </component>

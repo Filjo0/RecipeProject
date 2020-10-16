@@ -385,7 +385,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/.idea/
-/.vs/
+.idea/
+.vs/
 /Screenshot Debug.jpg
 /Screenshot Test.jpg
+Screenshot Debug1.jpg
