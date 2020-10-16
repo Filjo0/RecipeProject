@@ -94,7 +94,7 @@
       <workItem from="1602816648599" duration="1379000" />
       <workItem from="1602832676442" duration="8858000" />
       <workItem from="1602842687045" duration="1834000" />
-      <workItem from="1602845878705" duration="290000" />
+      <workItem from="1602845878705" duration="610000" />
     </task>
     <servers />
   </component>
@@ -127,6 +127,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="404" y="166" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1602843090991" />
+    <state x="413" y="111" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1602846177050">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="111" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1602846177050" />
     <state x="539" y="262" key="Github.ShareDialog" timestamp="1602833544504">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

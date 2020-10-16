@@ -38,6 +38,20 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# User-specific stuff:
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+
+# Sensitive or high-churn files:
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
 # Mono auto generated files
 mono_crash.*
 
@@ -386,7 +400,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 .idea/
-.vs/
 /Screenshot Debug.jpg
 /Screenshot Test.jpg
 Screenshot Debug1.jpg
