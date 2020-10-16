@@ -12,9 +12,8 @@
 
 # Common IntelliJ Platform excludes
 
-
-
 # User specific
+.idea
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/shelf/*
@@ -399,7 +398,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-.idea/
 /Screenshot Debug.jpg
 /Screenshot Test.jpg
 Screenshot Debug1.jpg
