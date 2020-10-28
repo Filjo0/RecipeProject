@@ -1,5 +1,5 @@
 # RecipeProject
-Simple Uni Recipe Catalog WPF + C# + Linq-To-SQL project - 
+Simple Uni Recipe Catalog WPF + C# + MicrosoftSQL + Linq-To-SQL project + material design 
 
 - Allows user to add/edit/delete recipes 
 - Allows user to add recipes to Favorites 
