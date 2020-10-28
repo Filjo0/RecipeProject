@@ -22,7 +22,7 @@ namespace RecipeAssignment.Model
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="recipesdb")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="RecipeAssignment")]
 	public partial class DataClasses1DataContext : System.Data.Linq.DataContext
 	{
 		
@@ -135,7 +135,7 @@ namespace RecipeAssignment.Model
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_recipe_name", DbType="NChar(200) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_recipe_name", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string recipe_name
 		{
 			get

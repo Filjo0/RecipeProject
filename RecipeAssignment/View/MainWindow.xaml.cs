@@ -19,8 +19,7 @@ namespace RecipeAssignment.View
         private readonly DataClasses1DataContext _dataClasses1DataContext = new DataClasses1DataContext();
 
         private readonly List<Recipe> _filterRecipeList = new List<Recipe>();
-        private readonly List<Recipe> _favRecipeList = new List<Recipe>();
-
+        private readonly HashSet<Recipe> _favRecipeSet = new HashSet<Recipe>();
 
         public MainWindow()
 
@@ -50,8 +49,13 @@ namespace RecipeAssignment.View
         {
             try
             {
+                foreach (var recipe in _dataClasses1DataContext.Recipes.ToList().Where(recipe => recipe.is_favorite))
+                {
+                    _favRecipeSet.Add(recipe);
+                }
+
                 DataFavorites.ItemsSource = null;
-                DataFavorites.ItemsSource = _favRecipeList;
+                DataFavorites.ItemsSource = _favRecipeSet;
             }
             catch (Exception ex)
             {
@@ -61,8 +65,24 @@ namespace RecipeAssignment.View
             }
         }
 
+        private void Add_To_Favorite(Recipe editedRecipe)
+        {
+            foreach (var recipe in _dataClasses1DataContext.Recipes.ToList()
+                .Where(recipe => DataGridRecipes.SelectedItem == recipe))
+            {
+                switch (editedRecipe.is_favorite)
+                {
+                    case true when !_favRecipeSet.Contains(editedRecipe):
+                        _favRecipeSet.Add(editedRecipe);
+                        break;
+                    case false when recipe.recipe_id == editedRecipe.recipe_id:
+                        _favRecipeSet.Remove(editedRecipe);
+                        break;
+                }
+            }
+        }
 
-        private void AddRecipe_Click(object sender, RoutedEventArgs e)
+        private void AddNewRecipe_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -115,6 +135,7 @@ namespace RecipeAssignment.View
 
 
                     MessageBox.Show("Recipe Deleted Successfully");
+                    TabItemRecipes.IsSelected = true;
                 }
             }
             catch (Exception ex)
@@ -125,33 +146,69 @@ namespace RecipeAssignment.View
             }
         }
 
+        private void UpdateRecipe_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                foreach (var item in _dataClasses1DataContext.Recipes.ToList()
+                    .Where(item => DataGridRecipes.SelectedItem == item))
+                {
+                    item.recipe_name = RecipeNameTextBox.Text;
+                    item.cooking_time = TimeSpan.Parse(CookingTimeTextBox.Text);
+                    item.description = DescriptionTextBox.Text;
+                    if (FavoriteCheckBox.IsChecked != null) item.is_favorite = (bool) FavoriteCheckBox.IsChecked;
+                    item.ingredients = IngNameTextBox.Text;
 
-        private void gridRec_MouseDC(object sender, MouseButtonEventArgs e)
+                    Add_To_Favorite(item);
+                }
+
+
+                _dataClasses1DataContext.SubmitChanges();
+
+                LoadRecipes();
+                LoadFavRecipes();
+
+                MessageBox.Show("Recipe Updated Successfully");
+
+
+                TabItemRecipes.IsSelected = true;
+            }
+            catch (Exception ex)
+            {
+                // Some other error occurred.
+                // Report the error to the user.
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void GridRec_MouseDC(object sender, MouseButtonEventArgs e)
         {
             switch (DataGridRecipes.SelectedItem)
             {
                 case null:
                     return;
-                case Recipe recipe:
-                    MessageBox.Show(recipe.ToString());
+                case Recipe _:
+                    TabItemAddEditRecipe.IsSelected = true;
                     break;
             }
         }
 
-        private void gridFavRec_MouseDC(object sender, MouseButtonEventArgs e)
+
+        private void GridFavRec_MouseDC(object sender, MouseButtonEventArgs e)
         {
             switch (DataFavorites.SelectedItem)
             {
                 case null:
                     return;
                 case Recipe recipe:
+
                     MessageBox.Show(recipe.ToString());
                     break;
             }
         }
 
 
-        private void ListBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void GridRec_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (var item in _dataClasses1DataContext.Recipes.ToList()
                 .Where(item => DataGridRecipes.SelectedItem == item))
@@ -178,17 +235,24 @@ namespace RecipeAssignment.View
             {
                 foreach (var recipe in _dataClasses1DataContext.Recipes.ToList())
                 {
-                    if (RbName.IsChecked == true)
+                    if (RbName.IsChecked == true && recipe.recipe_name.Contains(SearchTextBox.Text))
                     {
-                        if (recipe.recipe_name.Contains(SearchTextBox.Text))
+                        _filterRecipeList.Add(recipe);
+                    }
+
+                    try
+                    {
+                        if (RbCookingTime.IsChecked == true &&
+                            recipe.cooking_time == TimeSpan.Parse(SearchTextBox.Text))
                         {
                             _filterRecipeList.Add(recipe);
                         }
                     }
-
-                    if (RbCookingTime.IsChecked == true && recipe.cooking_time == TimeSpan.Parse(SearchTextBox.Text))
+                    catch (Exception ex)
                     {
-                        _filterRecipeList.Add(recipe);
+                        // Some other error occurred.
+                        // Report the error to the user.
+                        MessageBox.Show(ex.Message, "Error");
                     }
 
                     if (RbIngredient.IsChecked == true && recipe.ingredients.Contains(SearchTextBox.Text))
@@ -203,36 +267,6 @@ namespace RecipeAssignment.View
         }
 
 
-        private void UpdateRecipe_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                foreach (var item in _dataClasses1DataContext.Recipes.ToList()
-                    .Where(item => DataGridRecipes.SelectedItem == item))
-                {
-                    item.recipe_name = RecipeNameTextBox.Text;
-                    item.cooking_time = TimeSpan.Parse(CookingTimeTextBox.Text);
-                    item.description = DescriptionTextBox.Text;
-                    if (FavoriteCheckBox.IsChecked != null) item.is_favorite = (bool) FavoriteCheckBox.IsChecked;
-                    item.ingredients = IngNameTextBox.Text;
-
-                    Add_To_Favorite(item);
-                }
-
-                _dataClasses1DataContext.SubmitChanges();
-                MessageBox.Show("Recipe Updated Successfully");
-
-                LoadRecipes();
-                LoadFavRecipes();
-            }
-            catch (Exception ex)
-            {
-                // Some other error occurred.
-                // Report the error to the user.
-                MessageBox.Show(ex.Message, "Error");
-            }
-        }
-
         private void SaveRecipe_Click(object sender, RoutedEventArgs e)
         {
             var saveFileDialog = new SaveFileDialog
@@ -246,7 +280,7 @@ namespace RecipeAssignment.View
             // Create the writer for data.
             var bw = new BinaryWriter(fs);
 
-            foreach (var item in _favRecipeList)
+            foreach (var item in _favRecipeSet)
             {
                 var recId = item.recipe_id;
                 var recName = item.recipe_name;
@@ -265,12 +299,12 @@ namespace RecipeAssignment.View
 
             fs.Close();
             bw.Close();
-            _favRecipeList.Clear();
+            _favRecipeSet.Clear();
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            _favRecipeList.Clear();
+            _favRecipeSet.Clear();
             var openFileDialog = new OpenFileDialog
             {
                 Title = "Open File...",
@@ -290,28 +324,33 @@ namespace RecipeAssignment.View
                 description = br.ReadString(),
                 is_favorite = br.ReadBoolean(),
             };
-            _favRecipeList.Add(newRecipe);
+            _favRecipeSet.Add(newRecipe);
 
             fs.Close();
             br.Close();
 
-            LoadFavRecipes();
+            DataFavorites.ItemsSource = null;
+            DataFavorites.ItemsSource = _favRecipeSet;
         }
 
-        private void Add_To_Favorite(Recipe editedRecipe)
+
+        private void AddRecipeMain_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var recipe in _dataClasses1DataContext.Recipes.ToList()
-                .Where(recipe => DataGridRecipes.SelectedItem == recipe))
+            TabItemAddEditRecipe.IsSelected = true;
+        }
+
+
+        private void RecipeNameTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (((TextBox) sender).Text.Length < 3)
             {
-                switch (editedRecipe.is_favorite)
-                {
-                    case true when !_favRecipeList.Contains(editedRecipe):
-                        _favRecipeList.Add(editedRecipe);
-                        break;
-                    case false when recipe.recipe_id == editedRecipe.recipe_id:
-                        _favRecipeList.Remove(editedRecipe);
-                        break;
-                }
+                RecipeNameTextBox.Text = "";
+                MessageBox.Show("Recipe name is too short! Should be minimum of 3 characters!");
+            }
+            else if (((TextBox) sender).Text.Length > 150)
+            {
+                RecipeNameTextBox.Text = "";
+                MessageBox.Show("Recipe name is too long! Should be maximum of 150 characters!");
             }
         }
     }

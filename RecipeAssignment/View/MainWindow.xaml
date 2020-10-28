@@ -1,30 +1,47 @@
 ﻿<Window x:Class="RecipeAssignment.View.MainWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:validators="clr-namespace:RecipeAssignment.Utils.ValidationRules"
         mc:Ignorable="d"
-        Title="MainWindow" Height="538" Width="820">
+        Title="MainWindow" Height="484" Width="666">
 
-    <Grid>
-        <TabControl HorizontalAlignment="Left" Height="487" Margin="10,10,0,0" VerticalAlignment="Top" Width="792">
-            <TabItem x:Name="TabItemEmployees">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+    <Grid Background="#FF66CDAA">
+        <TabControl Background="#FFF0F8FF" Height="429" Margin="10,10,0,0" VerticalAlignment="Top">
+            <TabItem x:Name="TabItemRecipes">
                 <TabItem.Header>
+
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="3">&#x1F374;Recipes</TextBlock>
+                        <TextBlock Margin="3">&#127859;Recipes</TextBlock>
                         <Grid Background="#FFE5E5E5" />
                     </StackPanel>
                 </TabItem.Header>
                 <TabItem.Content>
-                    <Grid Margin="0,0,0,3">
-                        <DataGrid x:Name="DataGridRecipes" HorizontalAlignment="Left" Margin="10,78,0,0"
-                                  VerticalAlignment="Top" Height="360" Width="460"
+                    <Grid Margin="0,0,9,7">
+                        <DataGrid Background="#FFF8FDFF" x:Name="DataGridRecipes" HorizontalAlignment="Left"
+                                  Margin="10,118,0,10" Width="613"
                                   AutoGenerateColumns="False" EnableRowVirtualization="True" IsReadOnly="True"
-                                  MouseDoubleClick="gridRec_MouseDC" SelectionChanged="ListBox1_SelectionChanged">
+                                  MouseDoubleClick="GridRec_MouseDC" SelectionChanged="GridRec_SelectionChanged">
                             <DataGrid.Columns>
-                                <DataGridTextColumn x:Name="RecipenameCol" Header="Recipe Name"
-                                                    Binding="{Binding recipe_name}"
-                                                    MaxWidth="100" />
+                                <materialDesign:DataGridTextColumn
+                                    Header="Recipe Name"
+                                    MaxLength="50"
+                                    Binding="{Binding recipe_name}" />
+
                                 <DataGridTextColumn x:Name="CookingtimeCol" Header="Cooking Time"
                                                     Binding="{Binding cooking_time, StringFormat='hh\\:mm'}" />
                                 <DataGridTextColumn x:Name="IngredientsCol" Header="Ingredients"
@@ -36,52 +53,49 @@
                                                         Binding="{Binding is_favorite}" />
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Label Content="Recipe Name" HorizontalAlignment="Left" Margin="488,46,0,0"
-                               VerticalAlignment="Top" Width="98" Height="27" />
-                        <Label Content="Cooking Time" HorizontalAlignment="Left" Margin="488,78,0,0"
-                               VerticalAlignment="Top" Width="98" Height="27" />
-                        <Label Content="Ingredients" HorizontalAlignment="Left" Margin="488,110,0,0"
-                               VerticalAlignment="Top" Width="98" Height="26" />
-                        <Label Content="Description" HorizontalAlignment="Left" Margin="488,225,0,0"
-                               VerticalAlignment="Top" Width="98" Height="26" />
-                        <TextBox x:Name="RecipeNameTextBox" HorizontalAlignment="Left" Height="27" Margin="592,46,0,0"
-                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="184" MaxLines="1" MaxLength="200" />
-                        <TextBox x:Name="CookingTimeTextBox" HorizontalAlignment="Left" Height="27" Margin="592,78,0,0"
-                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="184" />
-                        <TextBox x:Name="IngNameTextBox" HorizontalAlignment="Left" Height="110" Margin="592,110,0,0"
-                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="184" AcceptsReturn="True" />
-                        <TextBox x:Name="DescriptionTextBox" HorizontalAlignment="Left" Height="125"
-                                 Margin="592,225,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184"
-                                 AcceptsReturn="True" />
 
-                        <Button x:Name="AddRecipe" Content="Add" HorizontalAlignment="Left" Margin="488,411,0,0"
-                                VerticalAlignment="Top" Height="27" Width="81" Click="AddRecipe_Click" />
-                        <Button x:Name="UpdateRecipe" Content="Edit" HorizontalAlignment="Left" Margin="592,411,0,0"
-                                VerticalAlignment="Top" Height="27" Width="80" Click="UpdateRecipe_Click" />
-                        <Button x:Name="DeleteRecipe" Content="Delete" HorizontalAlignment="Left" Margin="695,411,0,0"
-                                VerticalAlignment="Top" Height="27" Width="81" Click="DeleteRecipe_Click" />
+                        <materialDesign:ColorZone Mode="Light" CornerRadius="2" Height="37" Margin="10,7,141,0"
+                                                  materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                            <Grid>
+                                <TextBox x:Name="SearchTextBox" Height="37" Width="413"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Center"
+                                         materialDesign:HintAssist.Hint="Search"
+                                         materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                         BorderThickness="0" Margin="10,0,59,0" />
+                                <Button x:Name="SearchRecipe" Style="{DynamicResource MaterialDesignFlatButton}"
+                                        HorizontalAlignment="Left" VerticalAlignment="Top"
+                                        Width="49" Height="37"
+                                        Click="SearchRecipe_Click" Margin="433,0,0,0">
+                                    <materialDesign:PackIcon
+                                        Kind="Magnify" />
+                                </Button>
+                            </Grid>
+                        </materialDesign:ColorZone>
 
-                        <TextBox x:Name="SearchTextBox" HorizontalAlignment="Left" Height="26" Margin="10,10,0,0"
-                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="460" />
-                        <Grid Background="#FFD3D3D3" Margin="10,41,445,384">
+                        <Grid Margin="10,51,186,300">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="32*" />
                                 <ColumnDefinition Width="34*" />
                                 <ColumnDefinition Width="32*" />
                             </Grid.ColumnDefinitions>
-                            <RadioButton x:Name="RbName" Content="Name" Margin="0,3,0,0" Height="22"
-                                         VerticalAlignment="Top" HorizontalAlignment="Left" Width="108" />
-                            <RadioButton x:Name="RbIngredient" Content="Ingredient" Grid.Column="1" Margin="0,3,0,0"
-                                         VerticalAlignment="Top" Height="22" />
-                            <RadioButton x:Name="RbCookingTime" Content="Cooking time" Grid.Column="2" Margin="0,3,0,0"
-                                         VerticalAlignment="Top" Height="22" />
+                            <RadioButton x:Name="RbName" Content="Name" Height="25"
+                                         VerticalAlignment="Top" HorizontalAlignment="Left" Width="108" FontSize="10" />
+                            <RadioButton x:Name="RbIngredient" Content="Ingredient" Grid.Column="1"
+                                         VerticalAlignment="Top" Height="25" FontSize="10" />
+                            <RadioButton x:Name="RbCookingTime" Content="Cooking Time" Grid.Column="2"
+                                         Margin="0,0,10,0"
+                                         VerticalAlignment="Top" Height="25" FontSize="10" />
                         </Grid>
-                        <Button x:Name="SearchRecipe" Content="Search" HorizontalAlignment="Left" Margin="346,41,0,0"
-                                VerticalAlignment="Top" Width="124" Click="SearchRecipe_Click" Height="25" />
-
-                        <CheckBox x:Name="FavoriteCheckBox" Content="Add to Favorite" HorizontalAlignment="Left"
-                                  Margin="592,370,0,0" VerticalAlignment="Top" Height="32" Width="184" />
+                        <Grid Margin="532,7,10,344">
+                            <Button x:Name="AddRecipe" Content="  Recipe" HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" Width="91" Click="AddRecipeMain_Click" Height="34"
+                                    Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                            <materialDesign:PackIcon Kind="PlusBox" Foreground="White" Margin="5,11,0,0" Width="20"
+                                                     Height="14" />
+                        </Grid>
                     </Grid>
+
                 </TabItem.Content>
             </TabItem>
             <TabItem x:Name="TabItemFavorites">
@@ -93,10 +107,11 @@
                 <TabItem.Content>
                     <Grid>
 
-                        <DataGrid x:Name="DataFavorites" HorizontalAlignment="Left" Margin="10,10,0,0"
-                                  VerticalAlignment="Top" Height="260" Width="746"
+                        <DataGrid Background="#FFF8FDFF" x:Name="DataFavorites" HorizontalAlignment="Left"
+                                  Margin="10,10,0,0"
+                                  VerticalAlignment="Top" Height="298" Width="596"
                                   AutoGenerateColumns="False" EnableRowVirtualization="True" IsReadOnly="True"
-                                  MouseDoubleClick="gridFavRec_MouseDC">
+                                  MouseDoubleClick="GridFavRec_MouseDC">
                             <DataGrid.Columns>
                                 <DataGridTextColumn x:Name="FavrecipenameCol" Header="Recipe Name"
                                                     Binding="{Binding recipe_name}" />
@@ -109,11 +124,90 @@
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <Button x:Name="SaveFile" Content="Save " HorizontalAlignment="Left" Margin="318,288,0,0"
-                                VerticalAlignment="Top" Width="70" Click="SaveRecipe_Click" Height="25" />
-                        <Button x:Name="OpenFile" Content="Open" HorizontalAlignment="Left" Margin="409,288,0,0"
-                                VerticalAlignment="Top" Width="70" Click="Open_Click" Height="25" />
+                        <Button x:Name="SaveFile" Content="Save " HorizontalAlignment="Left" Margin="240,328,0,0"
+                                VerticalAlignment="Top" Width="80" Click="SaveRecipe_Click" Height="30" />
+                        <Button x:Name="OpenFile" Content="Open" HorizontalAlignment="Left" Margin="340,328,0,0"
+                                VerticalAlignment="Top" Width="80" Click="Open_Click" Height="30" />
                     </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="TabItemAddEditRecipe">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="3">&#x1F374;Add/Edit</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+
+                        <TextBox Background="#FFFFFFFF" x:Name="RecipeNameTextBox"
+                                 HorizontalAlignment="Left" VerticalAlignment="Top"
+                                 Height="28" Width="212"
+                                 Margin="169,16,0,0"
+                                 TextWrapping="Wrap" MaxLines="1" MaxLength="150"
+                                 LostFocus="RecipeNameTextBox_LostFocus"
+                                 materialDesign:HintAssist.Hint="Recipe Name"
+                                 materialDesign:ValidationAssist.HasError="True"
+                                 BorderThickness="1" />
+
+                        <TextBox x:Name="CookingTimeTextBox" Background="#FFFFFFFF"
+                                 HorizontalAlignment="Left" VerticalAlignment="Top"
+                                 Height="26" Width="212"
+                                 Margin="169,50,0,0"
+                                 TextWrapping="Wrap"
+                                 materialDesign:HintAssist.Hint="Cooking Time (eg. 00:30)"
+                                 materialDesign:ValidationAssist.HasError="True"
+                                 BorderThickness="1" />
+
+                        <TextBox x:Name="IngNameTextBox" Background="#FFFFFFFF"
+                                 HorizontalAlignment="Left" VerticalAlignment="Top"
+                                 Height="90" Width="212"
+                                 Margin="169,82,0,0"
+                                 TextWrapping="Wrap" AcceptsReturn="True"
+                                 BorderThickness="1"
+                                 materialDesign:HintAssist.Hint="Ingredients (eg. Potato - 1kg)" />
+
+                        <TextBox x:Name="DescriptionTextBox" Background="#FFFFFFFF"
+                                 HorizontalAlignment="Left" VerticalAlignment="Top"
+                                 Height="90" Width="212"
+                                 Margin="169,174,0,0" TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 BorderThickness="1"
+                                 materialDesign:HintAssist.Hint="Description. How to cook?" />
+
+                        <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                                                 PlacementMode="RightAndAlignMiddles" Margin="248,307,0,32">
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="AddNewRecipe" Click="AddNewRecipe_Click"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                                    Add
+                                </Button>
+                                <Button x:Name="UpdateRecipe" Click="UpdateRecipe_Click"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                                    Edit
+                                </Button>
+                                <Button x:Name="DeleteRecipe" Click="DeleteRecipe_Click"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                                    Delete
+                                </Button>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+
+                        <CheckBox x:Name="FavoriteCheckBox" Content="Add to Favorite"
+                                  HorizontalAlignment="Left" VerticalAlignment="Top"
+                                  Margin="169,270,0,0" Height="32" Width="212" />
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="TabItemAbout">
+
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="3">About</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid />
                 </TabItem.Content>
             </TabItem>
         </TabControl>
