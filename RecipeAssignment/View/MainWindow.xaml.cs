@@ -68,7 +68,7 @@ namespace RecipeAssignment.View
         private void Add_To_Favorite(Recipe editedRecipe)
         {
             foreach (var recipe in _dataClasses1DataContext.Recipes.ToList()
-                .Where(recipe => DataGridRecipes.SelectedItem == recipe))
+                         .Where(recipe => DataGridRecipes.SelectedItem == recipe))
             {
                 switch (editedRecipe.is_favorite)
                 {
@@ -91,7 +91,7 @@ namespace RecipeAssignment.View
                     recipe_name = RecipeNameTextBox.Text,
                     cooking_time = TimeSpan.Parse(CookingTimeTextBox.Text),
                     description = DescriptionTextBox.Text,
-                    is_favorite = FavoriteCheckBox.IsChecked != null && (bool) FavoriteCheckBox.IsChecked,
+                    is_favorite = FavoriteCheckBox.IsChecked != null && (bool)FavoriteCheckBox.IsChecked,
                     ingredients = IngNameTextBox.Text,
                 };
 
@@ -123,7 +123,7 @@ namespace RecipeAssignment.View
             try
             {
                 foreach (var item in _dataClasses1DataContext.Recipes.ToList()
-                    .Where(item => DataGridRecipes.SelectedItem == item))
+                             .Where(item => DataGridRecipes.SelectedItem == item))
                 {
                     Add_To_Favorite(item);
 
@@ -151,12 +151,12 @@ namespace RecipeAssignment.View
             try
             {
                 foreach (var item in _dataClasses1DataContext.Recipes.ToList()
-                    .Where(item => DataGridRecipes.SelectedItem == item))
+                             .Where(item => DataGridRecipes.SelectedItem == item))
                 {
                     item.recipe_name = RecipeNameTextBox.Text;
                     item.cooking_time = TimeSpan.Parse(CookingTimeTextBox.Text);
                     item.description = DescriptionTextBox.Text;
-                    if (FavoriteCheckBox.IsChecked != null) item.is_favorite = (bool) FavoriteCheckBox.IsChecked;
+                    if (FavoriteCheckBox.IsChecked != null) item.is_favorite = (bool)FavoriteCheckBox.IsChecked;
                     item.ingredients = IngNameTextBox.Text;
 
                     Add_To_Favorite(item);
@@ -211,7 +211,7 @@ namespace RecipeAssignment.View
         private void GridRec_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (var item in _dataClasses1DataContext.Recipes.ToList()
-                .Where(item => DataGridRecipes.SelectedItem == item))
+                         .Where(item => DataGridRecipes.SelectedItem == item))
             {
                 RecipeNameTextBox.Text = item.recipe_name;
                 CookingTimeTextBox.Text = item.cooking_time.ToString();
@@ -342,12 +342,12 @@ namespace RecipeAssignment.View
 
         private void RecipeNameTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (((TextBox) sender).Text.Length < 3)
+            if (((TextBox)sender).Text.Length < 3)
             {
                 RecipeNameTextBox.Text = "";
                 MessageBox.Show("Recipe name is too short! Should be minimum of 3 characters!");
             }
-            else if (((TextBox) sender).Text.Length > 150)
+            else if (((TextBox)sender).Text.Length > 150)
             {
                 RecipeNameTextBox.Text = "";
                 MessageBox.Show("Recipe name is too long! Should be maximum of 150 characters!");

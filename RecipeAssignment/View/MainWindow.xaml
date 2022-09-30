@@ -4,7 +4,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:validators="clr-namespace:RecipeAssignment.Utils.ValidationRules"
         mc:Ignorable="d"
         Title="MainWindow" Height="484" Width="666">
 

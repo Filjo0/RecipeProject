@@ -36,7 +36,7 @@ namespace RecipeAssignmentTests2
                 ingredients = "Cucumber - 1\nTomato - 1", description = "Cut", is_favorite = false
             };
 
-            var recipes = new List<Recipe> {recipe1, recipe2, recipe3};
+            var recipes = new List<Recipe> { recipe1, recipe2, recipe3 };
             _mockRecipeDataContext.Setup(x => x.Recipes()).Returns(new StubRecipeTable(recipes));
         }
 

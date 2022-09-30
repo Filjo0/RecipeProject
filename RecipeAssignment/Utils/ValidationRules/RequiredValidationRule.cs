@@ -45,9 +45,9 @@ namespace RecipeAssignment.Utils.ValidationRules
             {
                 if (value != null)
                 {
-                    if (((string) value).Length > 0)
+                    if (((string)value).Length > 0)
                     {
-                        _cookingTime = TimeSpan.Parse((string) value);
+                        _cookingTime = TimeSpan.Parse((string)value);
                     }
                 }
                 else
