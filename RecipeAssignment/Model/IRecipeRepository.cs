@@ -23,45 +23,34 @@ namespace RecipeAssignment.Model
 
         public Recipe AddRecipe(Recipe recipe)
         {
-            using (var db = _dataContextWrapper.CreateDataContext())
-            {
-                db.Recipes().InsertOnSubmit(recipe);
-                db.SubmitChanges();
-                return recipe;
-            }
+            using var db = _dataContextWrapper.CreateDataContext();
+            db.Recipes().InsertOnSubmit(recipe);
+            db.SubmitChanges();
+            return recipe;
         }
 
         public Recipe GetRecipe(int id)
         {
-            using (var db = _dataContextWrapper.CreateDataContext())
-            {
-                return (from recipe in db.Recipes() where recipe.recipe_id == id select recipe).SingleOrDefault();
-            }
+            using var db = _dataContextWrapper.CreateDataContext();
+            return (from recipe in db.Recipes() where recipe.recipe_id == id select recipe).SingleOrDefault();
         }
 
         public List<Recipe> GetAllRecipes()
         {
-            using (var db = _dataContextWrapper.CreateDataContext())
-            {
-                return (from recipe in db.Recipes() select recipe).ToList();
-            }
+            using var db = _dataContextWrapper.CreateDataContext();
+            return (from recipe in db.Recipes() select recipe).ToList();
         }
 
         public List<Recipe> GetRecipeByRecipeName(string recipeName)
         {
-            using (var db = _dataContextWrapper.CreateDataContext())
-            {
-                return (from recipe in db.Recipes() where recipe.recipe_name == recipeName select recipe).ToList();
-            }
+            using var db = _dataContextWrapper.CreateDataContext();
+            return (from recipe in db.Recipes() where recipe.recipe_name == recipeName select recipe).ToList();
         }
 
         public List<Recipe> GetRecipeByIngredient(string ingredient)
         {
-            using (var db = _dataContextWrapper.CreateDataContext())
-            {
-                return (from recipe in db.Recipes() where recipe.ingredients.Contains(ingredient) select recipe)
-                    .ToList();
-            }
+            using var db = _dataContextWrapper.CreateDataContext();
+            return (from recipe in db.Recipes() where recipe.ingredients.Contains(ingredient) select recipe).ToList();
         }
     }
 }

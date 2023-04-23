@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using RecipeAssignment.Model;
+using System;
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.IO;
@@ -6,20 +8,18 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.Win32;
-using RecipeAssignment.Model;
 
 namespace RecipeAssignment.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private readonly DataClasses1DataContext _dataClasses1DataContext = new DataClasses1DataContext();
+        private readonly DataClasses1DataContext _dataContext = new();
 
-        private readonly List<Recipe> _filterRecipeList = new List<Recipe>();
-        private readonly HashSet<Recipe> _favRecipeSet = new HashSet<Recipe>();
+        private readonly List<Recipe> _filterRecipeList = new();
+        private readonly HashSet<Recipe> _favoriteRecipes = new();
 
         public MainWindow()
 
@@ -35,7 +35,7 @@ namespace RecipeAssignment.View
             try
             {
                 DataGridRecipes.ItemsSource = null;
-                DataGridRecipes.ItemsSource = _dataClasses1DataContext.Recipes.ToList();
+                DataGridRecipes.ItemsSource = _dataContext.Recipes.ToList();
             }
             catch (Exception ex)
             {
@@ -49,13 +49,13 @@ namespace RecipeAssignment.View
         {
             try
             {
-                foreach (var recipe in _dataClasses1DataContext.Recipes.ToList().Where(recipe => recipe.is_favorite))
+                foreach (var recipe in _dataContext.Recipes.ToList().Where(recipe => recipe.is_favorite))
                 {
-                    _favRecipeSet.Add(recipe);
+                    _favoriteRecipes.Add(recipe);
                 }
 
                 DataFavorites.ItemsSource = null;
-                DataFavorites.ItemsSource = _favRecipeSet;
+                DataFavorites.ItemsSource = _favoriteRecipes;
             }
             catch (Exception ex)
             {
@@ -67,18 +67,16 @@ namespace RecipeAssignment.View
 
         private void Add_To_Favorite(Recipe editedRecipe)
         {
-            foreach (var recipe in _dataClasses1DataContext.Recipes.ToList()
-                         .Where(recipe => DataGridRecipes.SelectedItem == recipe))
+            var recipe = _dataContext.Recipes.FirstOrDefault(r => r == DataGridRecipes.SelectedItem);
+
+            switch (editedRecipe.is_favorite)
             {
-                switch (editedRecipe.is_favorite)
-                {
-                    case true when !_favRecipeSet.Contains(editedRecipe):
-                        _favRecipeSet.Add(editedRecipe);
-                        break;
-                    case false when recipe.recipe_id == editedRecipe.recipe_id:
-                        _favRecipeSet.Remove(editedRecipe);
-                        break;
-                }
+                case true when !_favoriteRecipes.Contains(editedRecipe):
+                    _favoriteRecipes.Add(editedRecipe);
+                    break;
+                case false when recipe != null && recipe.recipe_id == editedRecipe.recipe_id:
+                    _favoriteRecipes.Remove(editedRecipe);
+                    break;
             }
         }
 
@@ -97,8 +95,8 @@ namespace RecipeAssignment.View
 
                 Add_To_Favorite(newRecipe);
 
-                _dataClasses1DataContext.Recipes.InsertOnSubmit(newRecipe);
-                _dataClasses1DataContext.SubmitChanges(ConflictMode.FailOnFirstConflict);
+                _dataContext.Recipes.InsertOnSubmit(newRecipe);
+                _dataContext.SubmitChanges(ConflictMode.FailOnFirstConflict);
 
                 LoadRecipes();
                 LoadFavRecipes();
@@ -122,17 +120,15 @@ namespace RecipeAssignment.View
         {
             try
             {
-                foreach (var item in _dataClasses1DataContext.Recipes.ToList()
-                             .Where(item => DataGridRecipes.SelectedItem == item))
+                foreach (var item in _dataContext.Recipes.ToList().Where(item => DataGridRecipes.SelectedItem == item))
                 {
                     Add_To_Favorite(item);
 
-                    _dataClasses1DataContext.Recipes.DeleteOnSubmit(item);
-                    _dataClasses1DataContext.SubmitChanges();
+                    _dataContext.Recipes.DeleteOnSubmit(item);
+                    _dataContext.SubmitChanges();
 
                     LoadRecipes();
                     LoadFavRecipes();
-
 
                     MessageBox.Show("Recipe Deleted Successfully");
                     TabItemRecipes.IsSelected = true;
@@ -150,8 +146,7 @@ namespace RecipeAssignment.View
         {
             try
             {
-                foreach (var item in _dataClasses1DataContext.Recipes.ToList()
-                             .Where(item => DataGridRecipes.SelectedItem == item))
+                foreach (var item in _dataContext.Recipes.ToList().Where(item => DataGridRecipes.SelectedItem == item))
                 {
                     item.recipe_name = RecipeNameTextBox.Text;
                     item.cooking_time = TimeSpan.Parse(CookingTimeTextBox.Text);
@@ -162,14 +157,12 @@ namespace RecipeAssignment.View
                     Add_To_Favorite(item);
                 }
 
-
-                _dataClasses1DataContext.SubmitChanges();
+                _dataContext.SubmitChanges();
 
                 LoadRecipes();
                 LoadFavRecipes();
 
                 MessageBox.Show("Recipe Updated Successfully");
-
 
                 TabItemRecipes.IsSelected = true;
             }
@@ -193,7 +186,6 @@ namespace RecipeAssignment.View
             }
         }
 
-
         private void GridFavRec_MouseDC(object sender, MouseButtonEventArgs e)
         {
             switch (DataFavorites.SelectedItem)
@@ -207,11 +199,9 @@ namespace RecipeAssignment.View
             }
         }
 
-
         private void GridRec_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (var item in _dataClasses1DataContext.Recipes.ToList()
-                         .Where(item => DataGridRecipes.SelectedItem == item))
+            foreach (var item in _dataContext.Recipes.ToList().Where(item => DataGridRecipes.SelectedItem == item))
             {
                 RecipeNameTextBox.Text = item.recipe_name;
                 CookingTimeTextBox.Text = item.cooking_time.ToString();
@@ -229,11 +219,11 @@ namespace RecipeAssignment.View
 
             if (SearchTextBox.Text.Equals(""))
             {
-                _filterRecipeList.AddRange(_dataClasses1DataContext.Recipes.ToList());
+                _filterRecipeList.AddRange(_dataContext.Recipes.ToList());
             }
             else
             {
-                foreach (var recipe in _dataClasses1DataContext.Recipes.ToList())
+                foreach (var recipe in _dataContext.Recipes.ToList())
                 {
                     if (RbName.IsChecked == true && recipe.recipe_name.Contains(SearchTextBox.Text))
                     {
@@ -266,7 +256,6 @@ namespace RecipeAssignment.View
             DataGridRecipes.ItemsSource = _filterRecipeList;
         }
 
-
         private void SaveRecipe_Click(object sender, RoutedEventArgs e)
         {
             var saveFileDialog = new SaveFileDialog
@@ -280,7 +269,7 @@ namespace RecipeAssignment.View
             // Create the writer for data.
             var bw = new BinaryWriter(fs);
 
-            foreach (var item in _favRecipeSet)
+            foreach (var item in _favoriteRecipes)
             {
                 var recId = item.recipe_id;
                 var recName = item.recipe_name;
@@ -299,12 +288,12 @@ namespace RecipeAssignment.View
 
             fs.Close();
             bw.Close();
-            _favRecipeSet.Clear();
+            _favoriteRecipes.Clear();
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            _favRecipeSet.Clear();
+            _favoriteRecipes.Clear();
             var openFileDialog = new OpenFileDialog
             {
                 Title = "Open File...",
@@ -324,15 +313,14 @@ namespace RecipeAssignment.View
                 description = br.ReadString(),
                 is_favorite = br.ReadBoolean(),
             };
-            _favRecipeSet.Add(newRecipe);
+            _favoriteRecipes.Add(newRecipe);
 
             fs.Close();
             br.Close();
 
             DataFavorites.ItemsSource = null;
-            DataFavorites.ItemsSource = _favRecipeSet;
+            DataFavorites.ItemsSource = _favoriteRecipes;
         }
-
 
         private void AddRecipeMain_Click(object sender, RoutedEventArgs e)
         {

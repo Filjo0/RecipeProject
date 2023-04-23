@@ -41,7 +41,7 @@
                                     MaxLength="50"
                                     Binding="{Binding recipe_name}" />
 
-                                <DataGridTextColumn x:Name="CookingtimeCol" Header="Cooking Time"
+                                <DataGridTextColumn x:Name="CookingTimeCol" Header="Cooking Time"
                                                     Binding="{Binding cooking_time, StringFormat='hh\\:mm'}" />
                                 <DataGridTextColumn x:Name="IngredientsCol" Header="Ingredients"
                                                     Binding="{Binding ingredients}" />
@@ -54,7 +54,7 @@
                         </DataGrid>
 
                         <materialDesign:ColorZone Mode="Light" CornerRadius="2" Height="37" Margin="10,7,141,0"
-                                                  materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                                                  materialDesign:ElevationAssist.Elevation="Dp1">
                             <Grid>
                                 <TextBox x:Name="SearchTextBox" Height="37" Width="413"
                                          HorizontalAlignment="Stretch"
@@ -90,8 +90,8 @@
                             <Button x:Name="AddRecipe" Content="  Recipe" HorizontalAlignment="Center"
                                     VerticalAlignment="Center" Width="91" Click="AddRecipeMain_Click" Height="34"
                                     Style="{StaticResource MaterialDesignFlatMidBgButton}" />
-                            <materialDesign:PackIcon Kind="PlusBox" Foreground="White" Margin="5,11,0,0" Width="20"
-                                                     Height="14" />
+                            <materialDesign:PackIcon Kind="PlusBox" Foreground="White" Margin="7,8,0,0" Width="16"
+                                                     Height="10" />
                         </Grid>
                     </Grid>
 
@@ -112,13 +112,13 @@
                                   AutoGenerateColumns="False" EnableRowVirtualization="True" IsReadOnly="True"
                                   MouseDoubleClick="GridFavRec_MouseDC">
                             <DataGrid.Columns>
-                                <DataGridTextColumn x:Name="FavrecipenameCol" Header="Recipe Name"
+                                <DataGridTextColumn x:Name="FavRecipeNameCol" Header="Recipe Name"
                                                     Binding="{Binding recipe_name}" />
-                                <DataGridTextColumn x:Name="FavcookingtimeCol" Header="Cooking Time"
+                                <DataGridTextColumn x:Name="FavCookingTimeCol" Header="Cooking Time"
                                                     Binding="{Binding cooking_time, StringFormat='hh\\:mm'}" />
-                                <DataGridTextColumn x:Name="FavingredientsCol" Header="Ingredients"
+                                <DataGridTextColumn x:Name="FavIngredientsCol" Header="Ingredients"
                                                     Binding="{Binding ingredients}" />
-                                <DataGridTextColumn x:Name="FavdescriptionCol" Header="Description"
+                                <DataGridTextColumn x:Name="FavDescriptionCol" Header="Description"
                                                     Binding="{Binding description}" />
                             </DataGrid.Columns>
                         </DataGrid>
